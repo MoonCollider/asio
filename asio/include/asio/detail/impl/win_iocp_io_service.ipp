@@ -454,6 +454,13 @@ size_t win_iocp_io_service::do_one(bool block, asio::error_code& ec)
   }
 }
 
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable:4996)
+# endif
+  // CIG END
+
 DWORD win_iocp_io_service::get_gqcs_timeout()
 {
   OSVERSIONINFO version_info;
@@ -463,6 +470,12 @@ DWORD win_iocp_io_service::get_gqcs_timeout()
       return INFINITE;
   return default_gqcs_timeout;
 }
+
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(pop)
+# endif
+  // CIG END
 
 void win_iocp_io_service::do_add_timer_queue(timer_queue_base& queue)
 {

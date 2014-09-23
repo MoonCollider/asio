@@ -1965,8 +1965,19 @@ const char* inet_ntop(int af, const void* src, char* dest, size_t length,
         address_length, 0, string_buffer, &string_length), ec);
   ::WideCharToMultiByte(CP_ACP, 0, string_buffer, -1, dest, length, 0, 0);
 #else
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable:4996)
+# endif
+  // CIG END
   int result = error_wrapper(::WSAAddressToStringA(
         &address.base, address_length, 0, dest, &string_length), ec);
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(pop)
+# endif
+  // CIG END
 #endif
 
   // Windows may set error code on success.
@@ -2173,8 +2184,19 @@ int inet_pton(int af, const char* src, void* dest,
   int result = error_wrapper(::WSAStringToAddressW(
         wide_buffer, af, 0, &address.base, &address_length), ec);
 #else
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable:4996)
+# endif
+  // CIG END
   int result = error_wrapper(::WSAStringToAddressA(
         const_cast<char*>(src), af, 0, &address.base, &address_length), ec);
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(pop)
+# endif
+  // CIG END
 #endif
 
   if (af == ASIO_OS_DEF(AF_INET))
@@ -2311,7 +2333,18 @@ inline hostent* gethostbyaddr(const char* addr, int length, int af,
 #if defined(ASIO_WINDOWS) || defined(__CYGWIN__)
   (void)(buffer);
   (void)(buflength);
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable:4996)
+# endif
+  // CIG END
   hostent* retval = error_wrapper(::gethostbyaddr(addr, length, af), ec);
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(pop)
+# endif
+  // CIG END
   if (!retval)
     return 0;
   ec = asio::error_code();
@@ -2360,7 +2393,18 @@ inline hostent* gethostbyname(const char* name, int af, struct hostent* result,
     ec = asio::error::address_family_not_supported;
     return 0;
   }
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(push)
+#  pragma warning(disable:4996)
+# endif
+  // CIG END
   hostent* retval = error_wrapper(::gethostbyname(name), ec);
+  // CIG BEGIN - Suppress deprecated API warning on MSVC 12.
+# ifdef _MSC_VER
+#  pragma warning(pop)
+# endif
+  // CIG END
   if (!retval)
     return 0;
   ec = asio::error_code();
